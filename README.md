@@ -20,3 +20,6 @@ docker exec -it ctf /bin/zsh
 ```
 
 The docker container has a user `user` with the same permissions as the host user, so that you don't have to `chown` all the time (the default docker user is `root` and pollutes mounted volumes). Extra dependencies not included in `apt` are installed into `/home/user/tools` (such as `pwndbg`).
+
+## Workarounds
+[Running pwntools gdb inside docker](https://gist.github.com/turekt/71f6950bc9f048daaeb69479845b672b)
