@@ -1,25 +1,14 @@
 # docker-ctf
-Ubuntu based Docker container for playing CTFs
+Ubuntu based container for playing CTFs. Recommended that you use `podman` for correct user permissions so you can use the mounted filesystem seemlessly.
 
-## Installation and usage
-Build the docker container
+## Quickstart
+Docker image size is ~2GiB download.
 ```
-git clone https://github.com/mbund/docker-ctf
-cd docker-ctf
-docker build -t ctf --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) .
+podman run --rm -v $PWD:/ctf -w /ctf -it mbund/ctf zsh
 ```
 
-Run the docker container, and mount the current working directory into `/ctf`
+## Build
+You might want to build it yourself to avoid downloading as much.
 ```
-docker run --rm --volume $PWD:/ctf --workdir /ctf --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -d --name ctf -i ctf
+podman build -t ctf https://github.com/mbund/docker-ctf.git
 ```
-
-Connect to the docker container
-```
-docker exec -it ctf /bin/zsh
-```
-
-The docker container has a user `user` with the same permissions as the host user, so that you don't have to `chown` all the time (the default docker user is `root` and pollutes mounted volumes). Extra dependencies not included in `apt` are installed into `/home/user/tools` (such as `pwndbg`).
-
-## Workarounds
-[Running pwntools gdb inside docker](https://gist.github.com/turekt/71f6950bc9f048daaeb69479845b672b)

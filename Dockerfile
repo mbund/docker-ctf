@@ -1,14 +1,11 @@
-FROM ubuntu:20.04
+FROM ubuntu:latest
 
-# Don't ever ask anything on docker build
 ARG DEBIAN_FRONTEND=noninteractive
-
-ARG USER_ID
-ARG GROUP_ID
 
 RUN dpkg --add-architecture i386 && apt-get update
 RUN apt-get install -y \
         sudo git jq vim ssh netcat tmux binutils binwalk htop \
+        zsh \
         procps \
         strace ltrace \
         curl wget \
@@ -23,25 +20,23 @@ RUN apt-get install -y \
         sqlmap \
         steghide
 
-RUN addgroup --gid $GROUP_ID user
-RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
-RUN usermod -aG sudo user
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-USER user
+RUN gem install one_gadget
+
+ENV PATH="/root/.local/bin:${PATH}"
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-ENV PATH="/home/user/.cargo/bin:${PATH}"
+ENV PATH="/root/.cargo/bin:${PATH}"
 RUN cargo install pwninit
 
 RUN pip3 install --upgrade pip
-RUN pip3 install pwntools keystone-engine unicorn==1.0.3 capstone ropper autopep8 && \
-    cd /home/user && mkdir tools && cd tools && \
-    git clone https://github.com/radare/radare2 && cd radare2 && sys/install.sh && cd .. && \
-    git clone https://github.com/pwndbg/pwndbg && cd pwndbg && ./setup.sh && cd .. && \
-    git clone https://github.com/mariuszskon/autorop && cd autorop && pip install . && cd .. && \
-    cd ..
+RUN pip3 install pwntools keystone-engine unicorn==1.0.3 capstone ropper autopep8 python-lsp-server
 
-ENV PATH="/home/user/.local/bin:${PATH}"
+RUN mkdir -p /root/tools
+RUN cd /root/tools && git clone https://github.com/radare/radare2 && cd radare2 && sys/install.sh
+RUN cd /root/tools && git clone https://github.com/pwndbg/pwndbg && cd pwndbg && ./setup.sh
+RUN cd /root/tools && git clone https://github.com/mariuszskon/autorop && cd autorop && pip install .
+RUN cd /root/tools && git clone https://github.com/helix-editor/helix && cd helix && cargo install --path helix-term && \
+  mkdir -p ~/.config/helix && ln -s /root/tools/helix/runtime ~/.config/helix/runtime
 
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
     -t robbyrussell \
@@ -49,4 +44,3 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-completions \
     -p https://github.com/zsh-users/zsh-syntax-highlighting
-
