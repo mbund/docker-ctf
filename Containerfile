@@ -1,8 +1,8 @@
-FROM ubuntu:latest
+FROM docker.io/ubuntu:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN dpkg --add-architecture i386 && apt-get update && apt-get upgrade
+RUN dpkg --add-architecture i386 && apt-get update && apt-get upgrade -y
 
 RUN apt-get install -y git jq vim ssh openssh-server netcat tmux binutils binwalk htop zsh procps strace ltrace curl \
   wget rubygems dnsutils netcat nmap whois net-tools iputils-ping gcc gcc-multilib make build-essential pkg-config \
@@ -23,13 +23,13 @@ RUN mkdir -p /root/tools
 RUN cd /root/tools && git clone https://github.com/radare/radare2 && cd radare2 && sys/install.sh
 RUN cd /root/tools && git clone https://github.com/pwndbg/pwndbg && cd pwndbg && ./setup.sh
 RUN cd /root/tools && git clone https://github.com/mariuszskon/autorop && cd autorop && pip install .
-RUN cd /root/tools && git clone https://github.com/helix-editor/helix && cd helix && cargo install --path helix-term && \
+RUN cd /root/tools && git clone https://github.com/helix-editor/helix && cd helix && cargo install --locked --path helix-term && \
   mkdir -p ~/.config/helix && ln -s /root/tools/helix/runtime ~/.config/helix/runtime
 
 # zeratool requires radare2 to be installed first
 RUN pip3 install zeratool
 
-RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
   -t robbyrussell \
   -p git \
   -p https://github.com/zsh-users/zsh-autosuggestions \

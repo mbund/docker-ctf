@@ -1,0 +1,48 @@
+name: build-docker-ctf
+on:
+  pull_request:
+  push:
+  schedule:
+    - cron: "0 0 * * 4" # Thursdays at midnight UTC
+
+jobs:
+  push-ghcr:
+    name: Build and push image
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Generate variables
+        id: vars
+        run: |
+          echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+      - name: Build image
+        id: build
+        uses: redhat-actions/buildah-build@v2
+        with:
+          containerfiles: |
+            ./Containerfile
+          image: ${{ github.event.repository.name }}
+          tags: |
+            latest
+            stable
+            ${{ github.sha }}
+            ${{ steps.vars.outputs.date }}
+          oci: true
+
+      - name: Push to ghcr
+        uses: redhat-actions/push-to-registry@v2
+        id: push
+        with:
+          image: ${{ steps.build.outputs.image }}
+          tags: ${{ steps.build.outputs.tags }}
+          registry: ghcr.io/${{ github.repository_owner }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+          extra-args: |
+            --disable-content-trust
