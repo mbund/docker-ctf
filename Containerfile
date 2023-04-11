@@ -21,13 +21,15 @@ RUN cargo install pwninit
 
 RUN mkdir -p /root/tools
 RUN cd /root/tools && git clone https://github.com/radare/radare2 && cd radare2 && sys/install.sh
-RUN cd /root/tools && git clone https://github.com/pwndbg/pwndbg && cd pwndbg && ./setup.sh
 RUN cd /root/tools && git clone https://github.com/mariuszskon/autorop && cd autorop && pip install .
 RUN cd /root/tools && git clone https://github.com/helix-editor/helix && cd helix && cargo install --locked --path helix-term && \
   mkdir -p ~/.config/helix && ln -s /root/tools/helix/runtime ~/.config/helix/runtime
 
 # zeratool requires radare2 to be installed first
 RUN pip3 install zeratool
+
+# install gef (gdb extension)
+RUN bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
 
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
   -t robbyrussell \
@@ -38,7 +40,7 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 
 RUN cd /root && git clone https://github.com/gpakosz/.tmux && ln -s -f .tmux/.tmux.conf && cp .tmux/.tmux.conf.local .
 RUN sed -i "/set -g mouse on/s/^#//g" ~/.tmux.conf.local
-RUN echo "[editor]\ntrue-color = true" > ~/.config/helix/config.toml
+RUN echo 'theme = "base16_transparent"\n\n[editor]\ntrue-color = true\nline-number = "relative"\n' > ~/.config/helix/config.toml
 
 RUN chsh -s /bin/zsh
 
