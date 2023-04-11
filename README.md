@@ -7,6 +7,7 @@ Ubuntu based container for playing CTFs. Recommended that you use `podman` for c
 - gdb with [gef](https://github.com/hugsy/gef)
 - [tmux](https://github.com/gpakosz/.tmux) configuration
 - [helix](https://github.com/helix-editor/helix) editor (with LSP built in)
+- automatic updates weekly (Thursdays at midnight UTC)
 
 ![usage gif](docs/usage.gif)
 
@@ -16,7 +17,3 @@ Ubuntu based container for playing CTFs. Recommended that you use `podman` for c
 podman run -d --name ctf -v $PWD:/root/ctf ghcr.io/mbund/ctf:latest
 podman exec -it ctf zsh
 ```
-
-## Maintaining
-
-The image is updated weekly automatically (Thursdays at midnight UTC).
