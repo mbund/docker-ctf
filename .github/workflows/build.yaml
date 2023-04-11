@@ -51,7 +51,7 @@ jobs:
 
   update-docs:
     name: Update docs
-    needs: push-ghcr
+    # needs: push-ghcr
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-22.04
     permissions:
