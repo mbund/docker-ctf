@@ -19,7 +19,7 @@ Sleep 4s
 Type "23j" Sleep 1s
 Set TypingSpeed 800ms
 Type "o" Escape Type "o" Sleep 1s
-Type "r." Sleep 12s Type "sdl" Sleep 1s Tab Sleep 1s
+Type "r." Sleep 12s Type "sendl" Sleep 3s Tab Sleep 1s
 Set TypingSpeed 400ms
 Type '(b"ABCDEF"' Sleep 1s
 Set TypingSpeed 800ms
