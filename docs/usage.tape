@@ -7,6 +7,7 @@ Require podman
 
 Set TypingSpeed 150ms
 Type "podman exec -it ctf zsh" Enter Sleep 1s
+Sleep 1s
 Type "ls" Enter Sleep 1s
 Sleep 2s
 Type "tmux -2" Enter Sleep 1s
@@ -16,11 +17,13 @@ Ctrl+b Type "h" Sleep 1s
 Type "hx solve.py" Enter Sleep 1s
 Sleep 4s
 Type "23j" Sleep 1s
-Set TypingSpeed 400ms
+Set TypingSpeed 800ms
 Type "o" Escape Type "o" Sleep 1s
-Type "r.sendl" Sleep 5s Tab Sleep 1s
+Type "r." Sleep 12s Type "sdl" Sleep 1s Tab Sleep 1s
+Set TypingSpeed 400ms
 Type '(b"ABCDEF"' Sleep 1s
-Escape Type ":w" Enter Sleep 1s
+Set TypingSpeed 800ms
+Escape Type ":w" Sleep 1s Enter Sleep 1s
 
 Set TypingSpeed 150ms
 Ctrl+b Type "l" Sleep 1s
