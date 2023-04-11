@@ -6,7 +6,6 @@ Set Framerate 50
 Require podman
 
 Set TypingSpeed 150ms
-Type "podman run -d --name ctf -v $PWD/docs/example:/root/ctf ghcr.io/mbund/ctf:latest" Enter Sleep 1s
 Type "podman exec -it ctf zsh" Enter Sleep 1s
 Type "ls" Enter Sleep 1s
 Sleep 2s

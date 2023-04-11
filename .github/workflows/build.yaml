@@ -6,52 +6,53 @@ on:
     - cron: "0 0 * * 4" # Thursdays at midnight UTC
 
 jobs:
-  push-ghcr:
-    name: Build and push image
-    runs-on: ubuntu-22.04
-    permissions:
-      packages: write
-      id-token: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  # push-ghcr:
+  #   name: Build and push image
+  #   runs-on: ubuntu-22.04
+  #   permissions:
+  #     packages: write
+  #     id-token: write
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      - name: Generate variables
-        id: vars
-        run: |
-          echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+  #     - name: Generate variables
+  #       id: vars
+  #       run: |
+  #         echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
 
-      - name: Build image
-        id: build
-        uses: redhat-actions/buildah-build@v2
-        with:
-          oci: true
-          layers: true
-          containerfiles: |
-            ./Containerfile
-          image: ctf
-          tags: |
-            latest
-            stable
-            ${{ github.sha }}
-            ${{ steps.vars.outputs.date }}
+  #     - name: Build image
+  #       id: build
+  #       uses: redhat-actions/buildah-build@v2
+  #       with:
+  #         oci: true
+  #         layers: true
+  #         containerfiles: |
+  #           ./Containerfile
+  #         image: ctf
+  #         tags: |
+  #           latest
+  #           stable
+  #           ${{ github.sha }}
+  #           ${{ steps.vars.outputs.date }}
 
-      - name: Push to ghcr
-        if: ${{ github.event_name == 'push' }}
-        uses: redhat-actions/push-to-registry@v2
-        id: push
-        with:
-          image: ${{ steps.build.outputs.image }}
-          tags: ${{ steps.build.outputs.tags }}
-          registry: ghcr.io/${{ github.repository_owner }}
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
-          extra-args: |
-            --disable-content-trust
+  #     - name: Push to ghcr
+  #       if: ${{ github.event_name == 'push' }}
+  #       uses: redhat-actions/push-to-registry@v2
+  #       id: push
+  #       with:
+  #         image: ${{ steps.build.outputs.image }}
+  #         tags: ${{ steps.build.outputs.tags }}
+  #         registry: ghcr.io/${{ github.repository_owner }}
+  #         username: ${{ github.actor }}
+  #         password: ${{ github.token }}
+  #         extra-args: |
+  #           --disable-content-trust
 
   update-docs:
     name: Update docs
     needs: push-ghcr
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -59,14 +60,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Run container
+        run: |
+          podman run -d --name ctf -v $PWD/docs/example:/root/ctf ghcr.io/mbund/ctf:latest
+
       - name: Generate GIF
-        if: ${{ github.event_name == 'push' }}
         uses: charmbracelet/vhs-action@v1
         with:
           path: docs/usage.tape
 
       - name: Commit generated GIF
-        if: ${{ github.event_name == 'push' }}
         run: |
           git config user.name "vhs-action 📼"
           git config user.email "actions@github.com"
