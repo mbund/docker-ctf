@@ -8,7 +8,7 @@ RUN apt-get install -y git jq vim ssh openssh-server netcat tmux binutils binwal
   wget rubygems dnsutils netcat nmap whois net-tools iputils-ping gcc gcc-multilib make build-essential pkg-config \
   patchelf elfutils gdb gdb-multiarch gdb-multiarch libc6:i386 libncurses5:i386 libstdc++6:i386 libssl-dev libffi-dev \
   libpcre3-dev libdb-dev libxt-dev libxaw7-dev liblzma-dev python3 python3-pip python3-dev sqlmap steghide \
-  openssh-server libgmp3-dev libmpc-dev
+  openssh-server libgmp3-dev libmpc-dev bat
 RUN gem install one_gadget
 RUN pip3 install --upgrade pip
 RUN pip3 install pwntools keystone-engine unicorn capstone ropper autopep8 python-lsp-server

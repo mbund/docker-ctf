@@ -12,6 +12,7 @@ Type "ls" Enter Sleep 1s
 Sleep 2s
 Type "tmux -2" Enter Sleep 1s
 Ctrl+b Type "%" Sleep 1s
+Type "bat vuln.c" Enter Sleep 1s
 
 Ctrl+b Type "h" Sleep 1s
 Type "hx solve.py" Enter Sleep 1s
