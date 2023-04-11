@@ -48,3 +48,16 @@ jobs:
           password: ${{ github.token }}
           extra-args: |
             --disable-content-trust
+
+      - name: Generate GIF
+        uses: charmbracelet/vhs-action@v1
+        with:
+          path: docs/usage.tape
+
+      - name: Commit generated GIF
+        run: |
+          git config user.name "vhs-action 📼"
+          git config user.email "actions@github.com"
+          git add docs/*.gif
+          git commit -m "Update generated VHS GIFs"
+          git push
