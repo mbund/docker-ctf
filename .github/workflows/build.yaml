@@ -10,7 +10,6 @@ jobs:
     name: Build and push image
     runs-on: ubuntu-22.04
     permissions:
-      contents: read
       packages: write
       id-token: write
     steps:
@@ -38,6 +37,7 @@ jobs:
             ${{ steps.vars.outputs.date }}
 
       - name: Push to ghcr
+        if: ${{ github.event_name == 'push' }}
         uses: redhat-actions/push-to-registry@v2
         id: push
         with:
@@ -49,12 +49,24 @@ jobs:
           extra-args: |
             --disable-content-trust
 
+  update-docs:
+    name: Update docs
+    needs: push-ghcr
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Generate GIF
+        if: ${{ github.event_name == 'push' }}
         uses: charmbracelet/vhs-action@v1
         with:
           path: docs/usage.tape
 
       - name: Commit generated GIF
+        if: ${{ github.event_name == 'push' }}
         run: |
           git config user.name "vhs-action 📼"
           git config user.email "actions@github.com"
