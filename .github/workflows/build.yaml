@@ -55,17 +55,17 @@ jobs:
         run: |
           podman run -d --name ctf -v $PWD/docs/example:/root/ctf ctf
 
-      - name: Generate GIF
+      - name: Generate usage video
         if: ${{ github.event_name == 'push' }}
         uses: charmbracelet/vhs-action@v1
         with:
           path: docs/usage.tape
 
-      - name: Commit generated GIF
+      - name: Commit generated usage video
         if: ${{ github.event_name == 'push' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/*.gif
-          git commit -m "Update generated VHS GIFs 📼"
+          git add docs/*.webm
+          git commit -m "Update generated VHS outputs 📼"
           git push

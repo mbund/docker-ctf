@@ -1,4 +1,4 @@
-Output docs/usage.gif
+Output docs/usage.webm
 Set Width 1920
 Set Height 1080
 Set Framerate 50
