@@ -9,7 +9,7 @@ Ubuntu based container for playing CTFs. Recommended that you use `podman` for c
 - [helix](https://github.com/helix-editor/helix) editor (with LSP built in)
 - automatic updates weekly (Thursdays at midnight UTC)
 
-https://raw.githubusercontent.com/mbund/docker-ctf/main/docs/usage.mp4
+![usage video](docs/usage.gif)
 
 ## Run
 

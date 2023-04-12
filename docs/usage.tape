@@ -1,4 +1,4 @@
-Output docs/usage.mp4
+Output docs/usage.gif
 Set Width 1920
 Set Height 1080
 Set Framerate 50
