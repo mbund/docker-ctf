@@ -12,6 +12,7 @@ jobs:
     permissions:
       packages: write
       id-token: write
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -49,27 +50,19 @@ jobs:
           extra-args: |
             --disable-content-trust
 
-  update-docs:
-    name: Update docs
-    needs: push-ghcr
-    if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Run container
+        if: ${{ github.event_name == 'push' }}
         run: |
-          podman run -d --name ctf -v $PWD/docs/example:/root/ctf ghcr.io/mbund/ctf:latest
+          podman run -d --name ctf -v $PWD/docs/example:/root/ctf ctf
 
       - name: Generate GIF
+        if: ${{ github.event_name == 'push' }}
         uses: charmbracelet/vhs-action@v1
         with:
           path: docs/usage.tape
 
       - name: Commit generated GIF
+        if: ${{ github.event_name == 'push' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
