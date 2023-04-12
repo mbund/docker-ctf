@@ -38,6 +38,7 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
   -p https://github.com/zsh-users/zsh-completions \
   -p https://github.com/zsh-users/zsh-syntax-highlighting
 
+RUN mkdir -p ~/.local/bin && ln -s /usr/bin/batcat ~/.local/bin/bat
 RUN cd /root && git clone https://github.com/gpakosz/.tmux && ln -s -f .tmux/.tmux.conf && cp .tmux/.tmux.conf.local .
 RUN sed -i "/set -g mouse on/s/^#//g" ~/.tmux.conf.local
 RUN echo 'theme = "base16_transparent"\n\n[editor]\ntrue-color = true\nline-number = "relative"\n' > ~/.config/helix/config.toml
