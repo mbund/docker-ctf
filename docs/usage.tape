@@ -1,4 +1,4 @@
-Output docs/usage.webm
+Output docs/usage.mp4
 Set Width 1920
 Set Height 1080
 Set Framerate 50
