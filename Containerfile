@@ -1,4 +1,4 @@
-FROM docker.io/ubuntu:22.04
+FROM docker.io/ubuntu:20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
