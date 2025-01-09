@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -21,7 +21,7 @@ RUN cargo install pwninit
 
 RUN mkdir -p /root/tools
 RUN cd /root/tools && git clone https://github.com/radare/radare2 && cd radare2 && sys/install.sh
-RUN cd /root/tools && git clone https://github.com/mariuszskon/autorop && cd autorop && pip install .
+# RUN cd /root/tools && git clone https://github.com/mariuszskon/autorop && cd autorop && pip install .
 RUN cd /root/tools && git clone https://github.com/helix-editor/helix && cd helix && cargo install --locked --path helix-term && \
   mkdir -p ~/.config/helix && ln -s /root/tools/helix/runtime ~/.config/helix/runtime
 
